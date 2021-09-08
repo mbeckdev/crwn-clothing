@@ -5,10 +5,13 @@ import { connect } from 'react-redux';
 // modify our component to have access to things related to redux
 // HOCs are functions that take components as arguments
 //  and return you a new suped up component
+import { createStructuredSelector } from 'reselect';
 
 import { auth } from '../../firebase/firebase.utils';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
@@ -46,11 +49,16 @@ const Header = ({ currentUser, hidden }) => (
   </div>
 );
 
-// mapStateToProps could technically by any name here but is standard with redux codebases
-const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
-  // currentUser: state.user.currentUser,
-  currentUser,
-  hidden,
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden,
 });
+
+// // mapStateToProps could technically by any name here but is standard with redux codebases
+// const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+//   // currentUser: state.user.currentUser,
+//   currentUser,
+//   hidden,
+// });
 
 export default connect(mapStateToProps)(Header);
